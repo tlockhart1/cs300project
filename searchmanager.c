@@ -72,9 +72,6 @@ int main(int argc, char **argv){
     int current_msg = 0;
     response_buf *rbuf;
 
-    /*sleep for variable amount of time between sending messages*/
-    sleep(atoi(argv[1]));
-
     while(sndMESSAGE(getCDA(msg, msg_sent), sbuf, buf_length)){
 
         /*update current_snd_message global var*/
@@ -86,6 +83,9 @@ int main(int argc, char **argv){
         initMESSAGErcv(&rbuf);
 
         printf("Message(%d): \"%s\" Sent (%ld bytes)\n\n", msg_sent + 1, (char*)getCDA(pref, msg_sent), sizeof(char*));
+
+        /*sleep for variable amount of time between sending messages*/
+        sleep(atoi(argv[1]));
 
         current_msg = 0;
         while((err = rcvMESSAGE(getCDA(msg, msg_sent), rbuf, 2, 0))){
@@ -136,7 +136,7 @@ int main(int argc, char **argv){
             //send 0 prefix_buf id to passage processor for termination
             initMESSAGEbuffer(&sbuf, 1, 0, "", 0);
 
-            if (endMESSAGE(getCDA(msg, msg_sent - 1), sbuf) < 0){
+            if (endMESSAGE(getCDA(msg, msg_sent - 1), sbuf, 1 + sizeof(int) + 1) < 0){
 
                 fprintf(stderr, "endMESSAGE returned an error. Exiting...\n");
                 exit(-1);
@@ -222,6 +222,7 @@ int getPrefix(char **argv, int index, int num_prefix){
         #endif
 
         prefix = argv[++index];
+        length = strlen(prefix);
     }
 
     return index;
@@ -293,7 +294,7 @@ void SIGINTstatus(int siginit){
        else if(i == current_snd_message && num_passages > -1 && num_passages > 0){
 
            if(current_rcv_message == num_passages) printf("done\n");
-           else printf("%d of %d\n", current_rcv_message, num_passages);
+           else printf("%d of %d\n", current_rcv_message + 1, num_passages);
 
        }
        else printf("pending\n");

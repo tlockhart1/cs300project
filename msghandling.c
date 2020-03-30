@@ -93,8 +93,8 @@ extern int rcvMESSAGE(MESSAGE *msg, void *rbuf, int msgtype, int rcvmode){
     return 1; //success, notify caller
 }
 
-extern int endMESSAGE(MESSAGE *msg, void *sbuf){
-    return sndMESSAGE(msg, sbuf, 1);
+extern int endMESSAGE(MESSAGE *msg, void *sbuf, int buf_size){
+    return sndMESSAGE(msg, sbuf, buf_size);
 }
 
 extern void insertMESSAGErbuf(MESSAGE *msg, void *rbuf, int index){

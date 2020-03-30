@@ -17,7 +17,7 @@ extern void setMESSAGEsbuf(MESSAGE *msg, void *sbuf);
 
 extern void insertMESSAGErbuf(MESSAGE *msg, void *rbuf, int index);
 
-extern int endMESSAGE(MESSAGE *msg, void *sbuf);
+extern int endMESSAGE(MESSAGE *msg, void *sbuf, int buf_size);
 
 extern void *getMESSAGErbuf(MESSAGE *msg, int index);
 
