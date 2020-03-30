@@ -1,0 +1,10 @@
+{
+    "files.associations": {
+        "edu_cs300_messagejni.h": "c"
+    },
+    "java.project.referencedLibraries": [
+        "lib/**/*.jar",
+        "/usr/lib/jvm/java-11-openjdk-amd64/include/**/*.jar"
+    ],
+    "C_Cpp.errorSquiggles": "Disabled"
+}

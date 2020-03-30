@@ -1,0 +1,13 @@
+{
+	"folders": [
+		{
+			"path": "."
+		}
+	],
+	"settings": {
+		"files.associations": {
+			"edu_cs300_messagejni.h": "c",
+			"longest_word_search.h": "c"
+		}
+	}
+}
