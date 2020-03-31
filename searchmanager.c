@@ -55,6 +55,10 @@ int main(int argc, char **argv){
     ioctl(STDOUT_FILENO, TIOCGWINSZ, &terminal);
         
     parsePrefixes(pref, argv, argc);
+    if(sizeCDA(pref) == 0){
+        fprintf(stderr, "No prefixes were provided. Exiting...\n");
+        exit(-1);
+    }
 
     insertCDAback(msg, newMESSAGE(IPC_CREAT, 0666, CRIMSON_ID, QUEUE_NUMBER, 0));
     initSysQueueV(getCDA(msg, msg_sent));
@@ -214,15 +218,17 @@ int getPrefix(char **argv, int index, int num_prefix){
     char *prefix = argv[index];
     int length = strlen(prefix);
 
-    while (index < num_prefix && length < 3 || length > 20){
+    while (index < num_prefix && (length < 3 || length > 20)){
 
         #ifdef DEBUG
             if(length > 20)  fprintf(stderr, "\"%s\" is greater that 20 characters. Tossed\n", prefix);
             else fprintf(stderr, "\"%s\" is less that 3 characters. Tossed\n", prefix);
         #endif
 
-        prefix = argv[++index];
-        length = strlen(prefix);
+        if(++index < num_prefix){
+            prefix = argv[index];
+            length = strlen(prefix);
+        }
     }
 
     return index;
@@ -250,7 +256,10 @@ void parsePrefixes(CDA *pref, char **argv, int argc){
 
     while (i < argc){
 
-        i = getPrefix(argv, i, argc);
+        i = getPrefix(argv, i, argc); //getPrefix() should never get an i that is out of bounds...
+        #ifdef DEBUG
+            fprintf(stderr, "parsePrefixes() i: %d\n", i);
+        #endif
         if(i == argc) break;
 
         sem_wait(&hold);

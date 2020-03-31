@@ -55,18 +55,16 @@ class Worker extends Thread{
       File passage = new File(fileName); 
       ArrayList<String> words = new ArrayList<String>();
       Pattern insideWord = Pattern.compile("[^a-zA-Z]+");
-      Pattern delimiter = Pattern.compile("[^a-zA-Z\'-]+");
+      Pattern delimiter = Pattern.compile("[^a-zA-Z'-]+");
       Matcher badword;
       try{
         Scanner scanner = new Scanner(passage);
         scanner.useDelimiter(delimiter);
         while(scanner.hasNext()){
           String token = scanner.next().toLowerCase();
-          if(token.length() >= 3){
-            badword = insideWord.matcher(token);
-            if(!badword.find()) words.add(token);
-          }
-          else words.add(token);
+          //System.err.println(token);
+          badword = insideWord.matcher(token);
+          if(!badword.find() && token.length() >= 3) words.add(token);
         }
         scanner.close();
       }catch (FileNotFoundException e1){
