@@ -88,8 +88,7 @@ int main(int argc, char **argv){
 
         printf("Message(%d): \"%s\" Sent (%ld bytes)\n\n", msg_sent + 1, (char*)getCDA(pref, msg_sent), sizeof(char*));
 
-        /*sleep for variable amount of time between sending messages*/
-        sleep(atoi(argv[1]));
+
 
         current_msg = 0;
         while((err = rcvMESSAGE(getCDA(msg, msg_sent), rbuf, 2, 0))){
@@ -127,6 +126,9 @@ int main(int argc, char **argv){
 
         }
 
+        /*sleep for variable amount of time between sending messages*/
+        sleep(atoi(argv[1]));
+
         printf("Report \"%s\"\n", ((prefix_buf*)getMESSAGEsbuf(getCDA(msg, msg_sent)))->prefix);
 
         for(int i = 0; i < rbuf->count; i++)
@@ -139,8 +141,8 @@ int main(int argc, char **argv){
 
             //send 0 prefix_buf id to passage processor for termination
             initMESSAGEbuffer(&sbuf, 1, 0, "", 0);
-
-            if (endMESSAGE(getCDA(msg, msg_sent - 1), sbuf, 1 + sizeof(int) + 1) < 0){
+            buf_length = 0 + sizeof(int) + 1;
+           /* if (endMESSAGE(getCDA(msg, msg_sent - 1), sbuf, 1 + sizeof(int) + 1) < 0){
 
                 fprintf(stderr, "endMESSAGE returned an error. Exiting...\n");
                 exit(-1);
@@ -148,16 +150,18 @@ int main(int argc, char **argv){
             }
 
             free(sbuf);
-            break;
+            break;*/
+
+        }else{
+
+            insertCDAback(msg, newMESSAGE(IPC_CREAT, 0666, CRIMSON_ID, QUEUE_NUMBER, 0));
+            initMESSAGEbuffer(&sbuf, 1, msg_sent + 1, (char*)getCDA(pref, msg_sent), WORD_LENGTH);
+            setMESSAGEsbuf(getCDA(msg, msg_sent), sbuf);
+            setMESSAGEmsquid(getCDA(msg, msg_sent), getMESSAGEmsquid(getCDA(msg, msg_sent - 1))); 
+            buf_length = strlen(sbuf->prefix) + sizeof(int) + 1; 
 
         }
         
-        insertCDAback(msg, newMESSAGE(IPC_CREAT, 0666, CRIMSON_ID, QUEUE_NUMBER, 0));
-        initMESSAGEbuffer(&sbuf, 1, msg_sent + 1, (char*)getCDA(pref, msg_sent), WORD_LENGTH);
-        setMESSAGEsbuf(getCDA(msg, msg_sent), sbuf);
-        setMESSAGEmsquid(getCDA(msg, msg_sent), getMESSAGEmsquid(getCDA(msg, msg_sent - 1))); 
-        buf_length = strlen(sbuf->prefix) + sizeof(int) + 1; 
-
         #ifdef DEBUG
             fprintf(stderr, "message length: %ld\n", strlen(sbuf->prefix));
         #endif
