@@ -162,7 +162,7 @@ JNIEXPORT void JNICALL Java_edu_cs300_MessageJNI_writeLongestWordResponseMsg
     int lwl=strlen(longestWord);
     int buffer_length=sizeof(response_buf)-sizeof(long); //int
 
-    printf("msgsnd Reply %d of %d on %d:%s from %s present=%d lw=%s(len=%d) msglen=%d\n",passageIndex,passageCount,prefixID,prefix,passageName,present,longestWord,lwl,buffer_length);
+    fprintf(stderr, "msgsnd Reply %d of %d on %d:%s from %s present=%d lw=%s(len=%d) msglen=%d\n",passageIndex,passageCount,prefixID,prefix,passageName,present,longestWord,lwl,buffer_length);
 
     // // We'll send message type 1
     rbuf.mtype = 2;
@@ -187,8 +187,8 @@ JNIEXPORT void JNICALL Java_edu_cs300_MessageJNI_writeLongestWordResponseMsg
         fprintf(stderr, "Error sending msg: %s\n", strerror( errnum ));
         exit(1);
     }
-    else
-        fprintf(stderr,"Message: \"%d:%s\" Sent\n",rbuf.index, rbuf.longest_word);
+    //else
+        //fprintf(stderr,"Message: \"%d:%s\" Sent\n",rbuf.index, rbuf.longest_word);
 
 
     (*env)->ReleaseStringUTFChars(env, prefixStr, prefix);

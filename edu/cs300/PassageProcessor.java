@@ -39,8 +39,10 @@ public class PassageProcessor {
             + request.get(prefix_num).getPrefix() 
             + " received"
           );
-      System.err.println("prefix length = " + request.get(prefix_num).getPrefix().length());
-      if(request.get(request.size() - 1).getID() == 0) System.exit(0);
+      if(request.get(request.size() - 1).getID() == 0){
+        System.err.println("Terminating...");
+        System.exit(0);
+      } 
 
       try {
         for(int i = 0; i < treeCount; i++){

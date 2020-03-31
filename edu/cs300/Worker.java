@@ -24,27 +24,25 @@ class Worker extends Thread{
 
   @SuppressWarnings("unchecked")
   public void run() {
-    System.out.println("Worker-"+this.id+" ("+this.passageName+") thread started ...");
+    System.err.println("Worker-"+this.id+" ("+this.passageName+") thread started ...");
     textTrieTree=new LongestWordTrie(getWords(passageName));
     while (true){
       try {
         SearchRequest prefix = (SearchRequest)this.prefixRequestArray.take();
-        /* Print to stderr that a message has been received */
-        /*System.err.println
-        (
-          "**prefix("
-          + Integer.toString(prefix.getID()) 
-          + ") " 
-          + prefix.getPrefix() 
-          + " received"
-        );*/
-
         String found = this.textTrieTree.getLongestWord(prefix.getPrefix());
         
         int present;
         if(found.isEmpty()) present = 0;
         else present = 1;
         WorkerResults request_response = new WorkerResults(id, passageName, found, present);
+
+        String output = "Worker - " + Integer.toString(id) + " " + prefix.getID() + ":" + prefix.getPrefix() + " ==> ";
+        if(request_response.isPresent() == 1)
+          output = output + request_response.getLongestWord();
+        else
+          output = output + "not found";
+        System.err.println(output);
+
         resultsOutputArray.put(request_response);
       
       } catch(InterruptedException e){
