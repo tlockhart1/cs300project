@@ -23,4 +23,4 @@ cda.o: cda.c cda.h
 	$(CC) -c cda.c
 
 clean: 
-	$(RM) -r *.exe *.o *.class searchmanager
+	$(RM) -r *.exe *.o edu/cs300/*.class CtCILibrary/*.class searchmanager
