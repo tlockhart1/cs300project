@@ -18,8 +18,8 @@ struct message{
     key_t key;
     void *sbuf;
     CDA *rbuf;
-    int err; //why did i think i need this field?
-    int ret; // or this?
+    int err; 
+    int ret; 
 };
 
 extern size_t strlcpy(char *dst, const char *src, size_t size){
