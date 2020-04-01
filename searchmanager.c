@@ -83,17 +83,13 @@ int main(int argc, char **argv){
         sem_post(&hold);
 
         int err;
-        initMESSAGErcv(&rbuf);
 
         printf("Message(%d): \"%s\" Sent (%ld bytes)\n\n", sbuf->id, sbuf->prefix, sizeof(char*));
 
         /* message sbuf->id=0 sent, exit */
-        if(sbuf->id == 0){
-            free(sbuf);
-            break;
-        }
+        if(sbuf->id == 0) break;
 
-
+        initMESSAGErcv(&rbuf);
         current_msg = 0;
         while((err = rcvMESSAGE(getCDA(msg, msg_sent), rbuf, 2, 0))){
             /*(rbuf->index > -1) -- prevents segfault due to premature entry into while loop
@@ -145,16 +141,10 @@ int main(int argc, char **argv){
 
             //send 0 prefix_buf id to passage processor for termination
             initMESSAGEbuffer(&sbuf, 1, 0, "", 0);
+            insertCDAback(msg, newMESSAGE(IPC_CREAT, 0666, CRIMSON_ID, QUEUE_NUMBER, 0));
+            setMESSAGEsbuf(getCDA(msg, msg_sent), sbuf);
+            setMESSAGEmsquid(getCDA(msg, msg_sent), getMESSAGEmsquid(getCDA(msg, msg_sent - 1))); 
             buf_length = 0 + sizeof(int) + 1;
-           /* if (endMESSAGE(getCDA(msg, msg_sent - 1), sbuf, 1 + sizeof(int) + 1) < 0){
-
-                fprintf(stderr, "endMESSAGE returned an error. Exiting...\n");
-                exit(-1);
-
-            }
-
-            free(sbuf);
-            break;*/
 
         }else{
 
@@ -169,9 +159,6 @@ int main(int argc, char **argv){
         #ifdef DEBUG
             fprintf(stderr, "message length: %ld\n", strlen(sbuf->prefix));
         #endif
-
-        /*sleep for variable amount of time between sending messages*/
-        sleep(atoi(argv[1]));
 
     } 
 

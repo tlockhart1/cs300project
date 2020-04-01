@@ -93,10 +93,6 @@ extern int rcvMESSAGE(MESSAGE *msg, void *rbuf, int msgtype, int rcvmode){
     return 1; //success, notify caller
 }
 
-extern int endMESSAGE(MESSAGE *msg, void *sbuf, int buf_size){
-    return sndMESSAGE(msg, sbuf, buf_size);
-}
-
 extern void insertMESSAGErbuf(MESSAGE *msg, void *rbuf, int index){
     setCDA(msg->rbuf, index, rbuf);
 }
@@ -121,16 +117,13 @@ extern void setMESSAGEmsquid(MESSAGE *msg, int msqid){
     msg->msqid = msqid;
 }
 
+/* after receiving first message from passage processor,
+ * update CDA *rbuf with size == number of passages 
+ */
 extern void updateMESSAGErbufsize(MESSAGE *msg, int size){
     CDA *rbuf = newCDA(size);
     freeCDA(msg->rbuf);
     msg->rbuf = rbuf;
-}
-
-extern void updateMESSAGEsbufsize(MESSAGE *msg, int size){
-    CDA *sbuf = newCDA(size);
-    freeCDA(msg->sbuf);
-    msg->sbuf = sbuf;
 }
 
 extern void freeMESSAGE(MESSAGE *msg){

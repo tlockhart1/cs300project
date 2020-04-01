@@ -17,8 +17,6 @@ extern void setMESSAGEsbuf(MESSAGE *msg, void *sbuf);
 
 extern void insertMESSAGErbuf(MESSAGE *msg, void *rbuf, int index);
 
-extern int endMESSAGE(MESSAGE *msg, void *sbuf, int buf_size);
-
 extern void *getMESSAGErbuf(MESSAGE *msg, int index);
 
 extern void *getMESSAGEsbuf(MESSAGE *msg);
@@ -28,7 +26,5 @@ extern int getMESSAGEmsquid(MESSAGE *msg);
 extern void setMESSAGEmsquid(MESSAGE *msg, int msqid);
 
 extern void updateMESSAGErbufsize(MESSAGE *msg, int size);
-
-extern void updateMESSAGEsbufsize(MESSAGE *msg, int size);
 
 extern void freeMESSAGE(MESSAGE *msg);
