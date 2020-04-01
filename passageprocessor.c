@@ -1,3 +1,5 @@
+/* Initially used this to fork PassageProcessor from SearchManager,
+   but decided to run them seperately in there own terminals */
 #include <unistd.h>
 #include <sys/types.h>
 #include "passageprocessor.h"

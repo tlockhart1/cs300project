@@ -9,16 +9,18 @@ public class TrieNode {
     /* The children of this node in the trie.*/
     private HashMap<Character, TrieNode> children;
     private boolean terminates = false;
-    /*keep track of furthest path to termination*/
+    /* Modification: keep track of furthest path to termination*/
     private int distance;
+    /* Modification: child in longest word path */
     private TrieNode longestChar;
+    /* Modificaiton: parent object of child */
     private TrieNode parent;
     /* The character stored in this node as data. */
     private char character;	
 
     /* Helper fxn to adjust path pointers to farthest leaf
-     * if parent.distance == child.distance, then choose parent path pointer
-     * to the child with greater alphanumeric value
+     * if parent.distance == child.distance, then set parent.longestChar
+     * to the child with greater alphabetical value
      */
     private void updateDistance(TrieNode child){
         TrieNode parent = child.parent;
@@ -32,7 +34,7 @@ public class TrieNode {
             }
             /* parent.longestChar should not be null if here */
             else if(parent.distance == child.distance + 1){
-                    //System.out.println(" X - " + parent.longestChar.character + " Y - " + child.character);
+                    //System.err.println(" X - " + parent.longestChar.character + " Y - " + child.character);
                     if(Character.compare(Character.toLowerCase(parent.longestChar.character), Character.toLowerCase(child.character)) < 0){
                         parent.distance = child.distance + 1;
                         parent.longestChar = child;
@@ -67,7 +69,7 @@ public class TrieNode {
         return character;
     }
 
-    /* Returns the distance to the furthest leaf node from current node. */
+    /* Modification: Returns the distance to the furthest leaf node from current node. */
     public int getDistance(){
         return distance;
     }
@@ -118,11 +120,7 @@ public class TrieNode {
     public void setTerminates(boolean t) {
     	terminates = t;
     }
-
-    public int getNumChildren(){
-        return this.children.size();
-    }
-
+    /* Modification: called by LongestWordTrie.getLongestWord() */
     public TrieNode getGreatestDistance(){
         return this.longestChar;
     }

@@ -13,7 +13,9 @@ public class LongestWordTrie extends Trie{
     public LongestWordTrie(String[] words){
         super(words);
     }
-    /* return empty string if the prefix does not exist */
+    /* Overides parent method, returning the longest
+     * word if a prefix is found instead of just true or false
+     */
     public String getLongestWord(String prefix){
         String word = new String();
         TrieNode lastNode = getRoot();
