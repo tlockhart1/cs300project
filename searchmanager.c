@@ -85,8 +85,13 @@ int main(int argc, char **argv){
         int err;
         initMESSAGErcv(&rbuf);
 
-        printf("Message(%d): \"%s\" Sent (%ld bytes)\n\n", msg_sent + 1, (char*)getCDA(pref, msg_sent), sizeof(char*));
+        printf("Message(%d): \"%s\" Sent (%ld bytes)\n\n", sbuf->id, sbuf->prefix, sizeof(char*));
 
+        /* message sbuf->id=0 sent, exit */
+        if(sbuf->id == 0){
+            free(sbuf);
+            break;
+        }
 
 
         current_msg = 0;
@@ -171,6 +176,7 @@ int main(int argc, char **argv){
     } 
 
     freeResources(msg, pref);
+    printf("Exiting...\n");
     return 0;
 
 }
